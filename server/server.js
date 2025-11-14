@@ -6,13 +6,13 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const cookieParser = require('cookie-parser'); // 1. Import cookie-parser
 
 // Import routes
 const postRoutes = require('./routes/posts');
 const categoryRoutes = require('./routes/categories');
 const authRoutes = require('./routes/auth');
-
-// Load environment variables
+const uploadRoutes = require('./routes/uploadRoutes.js');// Load environment variables
 dotenv.config();
 
 // Initialize Express app
@@ -23,10 +23,11 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser()); // 2. Add this line
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use('/api/upload', uploadRoutes);
 // Log requests in development mode
 if (process.env.NODE_ENV === 'development') {
   app.use((req, res, next) => {

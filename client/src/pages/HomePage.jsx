@@ -33,6 +33,14 @@ const HomePage = () => {
         {postsData && postsData.data.length > 0 ? (
           postsData.data.map((post) => (
             <Card key={post._id} className="flex flex-col">
+              {post.featuredImage && (
+                <img
+                  src={`http://localhost:5000${post.featuredImage}`}
+                  alt={post.title}
+                  className="w-full h-48 object-cover rounded-t-xl"
+                />
+              )}
+              
               <CardHeader>
                 <CardTitle>{post.title}</CardTitle>
                 <CardDescription>

@@ -4,19 +4,29 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import PostPage from './pages/PostPage';
-import PostFormPage from './pages/PostFormPage'; // 1. Import the new page
+import PostFormPage from './pages/PostFormPage';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import ProtectedRoute from './components/ProtectedRoute'; // 1. Import ProtectedRoute
 
 function App() {
   return (
     <Routes>
-      {/* This Route uses the Layout component */}
+      {/* Routes WITH the main layout (navbar, etc.) */}
       <Route path="/" element={<Layout />}>
-        {/* The child routes render inside the Layout's <Outlet /> */}
         <Route index element={<HomePage />} />
         <Route path="post/:id" element={<PostPage />} />
-        {/* Add more routes here later, like for creating/editing posts */}
-        <Route path="create-post" element={<PostFormPage />} /> {/* 2. Add this route */}
+
+        {/* 2. Create a new ProtectedRoute group */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="create-post" element={<PostFormPage />} />
+          <Route path="post/edit/:id" element={<PostFormPage />} />
+        </Route>
       </Route>
+
+      {/* Routes WITHOUT the main layout */}
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<LoginPage />} />
     </Routes>
   );
 }

@@ -1,6 +1,6 @@
 // src/pages/PostPage.jsx
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom'; // 1. Import Link
 import useFetch from '../hooks/useFetch';
 import {
   Card,
@@ -8,38 +8,47 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'; // Import shadcn card
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button'; // 2. Import Button
 
 const PostPage = () => {
-  // 1. Get the 'id' from the URL
   const { id } = useParams();
-
-  // 2. Fetch the single post using the id
   const { data: postData, loading, error } = useFetch(`/api/posts/${id}`);
 
-  // Handle Loading State
   if (loading) {
     return <div>Loading post...</div>;
   }
 
-  // Handle Error State
   if (error) {
     return <div className="text-red-500">Error: {error}</div>;
   }
 
-  // Handle Success State
   return (
     <div>
       {postData && postData.data ? (
         <Card>
+          {postData.data.featuredImage && (
+            <img
+              src={`http://localhost:5000${postData.data.featuredImage}`}
+              alt={postData.data.title}
+              className="w-full h-72 object-cover rounded-t-xl mb-4"
+            />
+          )}
           <CardHeader>
-            <CardTitle className="text-3xl">{postData.data.title}</CardTitle>
-            <CardDescription>
-              By {postData.data.author.username} in {postData.data.category.name}
-            </CardDescription>
+            <div className="flex justify-between items-center">
+              <div>
+                <CardTitle className="text-3xl">{postData.data.title}</CardTitle>
+                <CardDescription>
+                  By {postData.data.author.username} in {postData.data.category.name}
+                </CardDescription>
+              </div>
+              {/* 3. Add this Link, wrapped in a Button */}
+              <Link to={`/post/edit/${id}`}>
+                <Button variant="outline">Edit Post</Button>
+              </Link>
+            </div>
           </CardHeader>
           <CardContent>
-            {/* This is where the full blog post content will go */}
             <div className="prose max-w-none">
               <p>{postData.data.content}</p>
             </div>
